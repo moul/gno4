@@ -1,0 +1,67 @@
+/* No framework and no build step. One file, one palette, and the same colours
+   the realm's SVG uses, so the board looks the same whether it was drawn here
+   or on chain. */
+:root {
+  --board: #1d4ed8;
+  --hole: #f8fafc;
+  --red: #ef4444;
+  --yellow: #facc15;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --bg: #ffffff;
+  --panel: #f8fafc;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ink: #e2e8f0; --bg: #0b1120; --panel: #111a2e; --line: #1e293b; --muted: #94a3b8; }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+header { padding: 1.5rem clamp(1rem, 4vw, 3rem) 0; }
+h1 { margin: 0; font-size: 1.9rem; letter-spacing: -0.02em; }
+.dot { display: inline-block; width: .7em; height: .7em; border-radius: 50%; margin-right: .1em; }
+.dot.red { background: var(--red); } .dot.yellow { background: var(--yellow); }
+.tagline { margin: .2rem 0 1rem; color: var(--muted); }
+nav { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+nav label { color: var(--muted); font-size: .85rem; }
+select, button { font: inherit; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: .35rem .6rem; }
+button { cursor: pointer; }
+button:hover { border-color: var(--board); }
+button.link { background: none; border: none; color: var(--muted); text-decoration: underline; padding: 0; }
+.status { font-size: .85rem; color: var(--muted); margin-left: auto; }
+.status.live { color: #16a34a; }
+.status.bad { color: var(--red); }
+
+main { display: grid; grid-template-columns: minmax(320px, 1fr) minmax(300px, 24rem); gap: clamp(1rem, 3vw, 2.5rem); padding: 1.5rem clamp(1rem, 4vw, 3rem) 3rem; align-items: start; }
+@media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+
+#board { max-width: 560px; }
+#board svg { width: 100%; height: auto; display: block; border-radius: 14px; }
+#board-panel { max-width: 560px; }
+.verdict { font-weight: 600; margin: .8rem 0 .4rem; min-height: 1.6em; }
+.columns { display: grid; grid-template-columns: repeat(7, 1fr); gap: .4rem; }
+.columns button { padding: .5rem 0; font-weight: 600; }
+.columns button[disabled] { opacity: .3; cursor: default; }
+.board-meta { display: flex; gap: 1rem; align-items: center; margin-top: .8rem; flex-wrap: wrap; font-size: .85rem; color: var(--muted); }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+.tabs { display: flex; gap: .4rem; margin-bottom: 1rem; }
+.tabs button.on { background: var(--board); color: #fff; border-color: var(--board); }
+.pane.hidden { display: none; }
+.pane p { color: var(--muted); font-size: .9rem; }
+
+#tables { margin: .8rem 0; display: grid; gap: .5rem; }
+.table-row { display: flex; gap: .6rem; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: .5rem .7rem; font-size: .85rem; }
+.table-row .id { font-weight: 700; }
+.table-row .who { color: var(--muted); font-family: ui-monospace, monospace; }
+.table-row button { margin-left: auto; padding: .2rem .5rem; font-size: .8rem; }
+pre { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: .7rem; overflow-x: auto; font-size: .8rem; white-space: pre-wrap; }
+footer { margin-top: 2rem; border-top: 1px solid var(--line); padding-top: 1rem; font-size: .85rem; color: var(--muted); }
+footer a { color: inherit; }
+.fine { font-size: .8rem; opacity: .8; }
+
+@keyframes fall { from { transform: translateY(var(--from)); } to { transform: translateY(0); } }
+.falling { animation: fall .28s cubic-bezier(.4,.9,.5,1.2); }

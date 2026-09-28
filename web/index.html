@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gno4 — Connect Four, with the chain as the referee</title>
+<meta name="description" content="Connect Four on gno.land. The rules are a pure gno package, the referee is a realm, and this page is only one of the ways to look at it.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231d4ed8'/><circle cx='11' cy='16' r='5' fill='%23ef4444'/><circle cx='22' cy='16' r='5' fill='%23facc15'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1><span class="dot red"></span><span class="dot yellow"></span> gno4</h1>
+  <p class="tagline">Connect Four, with the chain as the referee.</p>
+  <nav>
+    <label>network
+      <select id="network">
+        <option value="mainnet">mainnet · r/moul/gno4</option>
+        <option value="preview">preview · r/moul/gno4/preview</option>
+        <option value="local">local gnodev</option>
+      </select>
+    </label>
+    <button id="connect" type="button">Connect wallet</button>
+    <span id="status" class="status">reading only — no wallet needed</span>
+  </nav>
+</header>
+
+<main>
+  <section id="board-panel">
+    <div id="board"></div>
+    <p id="verdict" class="verdict"></p>
+    <div id="columns" class="columns"></div>
+    <div class="board-meta">
+      <span id="movelist" class="mono"></span>
+      <button id="share" type="button" class="link">copy link</button>
+      <button id="undo" type="button" class="link">undo</button>
+      <button id="reset" type="button" class="link">new board</button>
+    </div>
+  </section>
+
+  <aside>
+    <div class="tabs" role="tablist">
+      <button data-mode="local" class="on" type="button">Play here</button>
+      <button data-mode="bot" type="button">Play the bot</button>
+      <button data-mode="chain" type="button">Play on chain</button>
+    </div>
+
+    <div id="pane-local" class="pane">
+      <p>Two people, one screen, nothing sent anywhere. The rules running here are a
+      second implementation of the on-chain ones, cross-checked against the same
+      fixtures, so this board and a real game can never disagree.</p>
+    </div>
+
+    <div id="pane-bot" class="pane hidden">
+      <p>A six-ply search, in this tab. It is the part of a game that should never be
+      on chain: nobody should pay gas for somebody else's thinking.</p>
+      <label>you play <select id="botside"><option value="1">red (first)</option><option value="2">yellow</option></select></label>
+    </div>
+
+    <div id="pane-chain" class="pane hidden">
+      <p id="chain-intro">Live tables, read straight from the chain. Reading needs no
+      wallet; only a move does.</p>
+      <div id="tables"></div>
+      <button id="open-table" type="button">Open a table</button>
+      <details id="fallback">
+        <summary>No wallet? The command that does the same thing</summary>
+        <pre id="cmd" class="mono"></pre>
+      </details>
+    </div>
+
+    <footer>
+      <p>The same game, three ways to look at it:
+        <a id="link-realm" href="https://gno.land/r/moul/gno4">the realm in gnoweb</a> ·
+        <a href="https://github.com/moul/gno4">the source</a> ·
+        <a href="https://github.com/moul/gno4/blob/main/CHECKLIST.md">the checklist this is written against</a>
+      </p>
+      <p class="fine">Part of an exploration of what a web2.5 app on gno.land actually needs.
+      Deliberately small, deliberately over-documented.</p>
+    </footer>
+  </aside>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
