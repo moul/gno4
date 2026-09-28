@@ -14,7 +14,7 @@ import (
 // running under.
 //
 // Not a constant, on purpose. The same source is deployed twice: once at
-// r/moul/gno4 and once at r/moul/gno4/preview, the redeployable twin. A
+// r/moul/gno4 and once at r/moul/preview/gno4, the redeployable twin. A
 // hardcoded "/r/moul/gno4" would send every link on the preview back to
 // production, which reads as working and is the most confusing possible bug.
 // txlink already does exactly this for the transaction links; this is the same
@@ -212,8 +212,8 @@ board you see is an SVG generated at render time and inlined as a data URI, so
 it costs no storage and there is no asset to go missing. Every page here is
 reachable with no wallet and no JavaScript.
 
-There are two deployments of this same source: this one, and a ` + "`/preview`" + `
-twin flagged ` + "`private = true`" + ` so it stays redeployable while the design
+There are two deployments of this same source: this one, and a ` + "`r/moul/preview/gno4`" + `
+flagged ` + "`private = true`" + ` so it stays redeployable while the design
 is still moving. A public path can never be redeployed, which makes the flag the
 most consequential line in the whole repository.
 

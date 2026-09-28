@@ -171,8 +171,8 @@ board you see is an SVG generated at render time and inlined as a data URI, so
 it costs no storage and there is no asset to go missing. Every page here is
 reachable with no wallet and no JavaScript.
 
-There are two deployments of this same source: this one, and a {BT}/preview{BT}
-twin flagged {BT}private = true{BT} so it stays redeployable while the design
+There are two deployments of this same source: this one, and a {BT}r/moul/preview/gno4{BT}
+flagged {BT}private = true{BT} so it stays redeployable while the design
 is still moving. A public path can never be redeployed, which makes the flag the
 most consequential line in the whole repository.
 

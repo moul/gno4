@@ -8,6 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/moul/gno4/actions/workflows/ci.yml"><img src="https://github.com/moul/gno4/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://gnoscope.com/realm/r/moul/gno4"><img src="https://gnoscope.com/_badges/shield/status/r/moul/gno4?network=mainnet" alt="realm status on mainnet"></a>
   <a href="./CHECKLIST.md"><img src="https://img.shields.io/badge/web2.5-checklist-1d4ed8" alt="checklist"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-97ca00.svg" alt="License"></a>
 </p>
@@ -26,7 +27,7 @@
 ```
 p/moul/gno4/v0     the rules. no chain import, no address, no height.
 r/moul/gno4        who may move, when, and what the world sees.
-r/moul/gno4/preview  the same source at a second path, private = true. generated.
+r/moul/preview/gno4  the same source at a second path, private = true. generated.
 web/               a static page. no build step, no node_modules.
 ```
 
@@ -41,7 +42,7 @@ is a link you can paste.
 and inlined as a data URI. It costs no storage, there is no asset to host, and the entire
 game is playable from gnoweb with no wallet and no JavaScript at all.
 
-**The same source is deployed twice.** `r/moul/gno4` is production; `r/moul/gno4/preview`
+**The same source is deployed twice.** `r/moul/gno4` is production; `r/moul/preview/gno4`
 is the redeployable twin, flagged `private = true`, and is what staging is until a testnet
 is worth pointing at. Only `gnomod.toml` differs between them, which is why no page in the
 realm may hardcode its own path — a guard enforces it.
