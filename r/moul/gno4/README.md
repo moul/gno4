@@ -23,7 +23,7 @@ no abandoned-table timeout to get wrong. Money is a second design and not a flag
 one.
 
 **No page hardcodes this realm's path.** The same source is deployed twice, here and at
-`/preview`, and every link is built from the package path the code is actually running
+`r/moul/preview/gno4`, and every link is built from the package path the code is actually running
 under. A hardcoded link would send every click on the preview back to production and look
 like it was working.
 
