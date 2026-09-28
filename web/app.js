@@ -125,6 +125,7 @@ async function refresh() {
     state.tables = [];
     // The realm may simply not be deployed on this network yet, which is a
     // normal state for a repository whose whole point is the deploy story.
+    // renderTables below prints the empty state, so the panel never sits blank.
     say(`${state.netName}: ${err.message}`, "bad");
   }
   renderTables();
