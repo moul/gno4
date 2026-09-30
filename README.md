@@ -61,6 +61,23 @@ The only thing needed on the machine is a `gno` toolchain and `GNOROOT` pointing
 [gnolang/gno](https://github.com/gnolang/gno) checkout, for the stdlibs. Every `gno.land`
 dependency is committed under `vendor/`, so nothing here needs the network.
 
+## Playing without a popup
+
+An **account session** is a key this page holds, delegated by your account and scoped to one
+realm, capped in GNOT, expiring in hours. Once it is granted, every move signs locally with no
+wallet prompt, and the chain still sees **you** as the caller, so your seat and your record
+stay yours.
+
+Granting it is one command, because no wallet can do it: Adena signs `/bank.MsgSend`,
+`/vm.m_call`, `/vm.m_addpkg` and `/vm.m_run`, and `/auth.m_create_session` is not among them.
+The page builds the command with your key already in it.
+
+The private key lives in `localStorage`. That is a real exposure and the page says so: what
+protects you is the grant, not the key. One realm, one budget, and it expires on its own.
+
+The signing path is `web/crypto.js`, `web/amino.js` and `web/session.js`, checked against
+documents `gnokey` itself produced and against the live chain, in CI.
+
 ## What it does not do
 
 **No wagers.** A table holds no coins, so there is no escrow, no payout and no

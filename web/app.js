@@ -4,6 +4,8 @@
 // goes differs.
 import * as e from "./engine.js";
 import { NETWORKS, qevalString, parseFeed, wallet, gnokeyCommand } from "./chain.js";
+import * as onboarding from "./onboarding.js";
+import * as gnosession from "./session.js";
 
 const $ = (id) => document.getElementById(id);
 const state = {
@@ -16,6 +18,10 @@ const state = {
   tables: [],
   animate: -1,      // the cell to drop in, once
   poll: null,
+  // When a session is granted, moves are signed here instead of by the wallet.
+  // Same caller either way: the chain sees the master, so the seat is the same.
+  session: null,
+  grant: null,
 };
 
 // ---- drawing -------------------------------------------------------------
@@ -104,14 +110,7 @@ async function play(col) {
 }
 
 async function playOnChain(col) {
-  try {
-    say("signing…");
-    await wallet.call(state.net, state.account, "Play", [state.table.id, col + 1]);
-    say("sent — waiting for the block", "live");
-    setTimeout(refresh, 1500);
-  } catch (err) {
-    say(err.message, "bad");
-  }
+  return tx("Play", [state.table.id, col + 1]);
 }
 
 // ---- chain ---------------------------------------------------------------
@@ -157,8 +156,16 @@ function renderTables() {
 async function tx(fn, args) {
   if (!state.account) { say("connect a wallet first, or paste the command below", "bad"); return; }
   try {
-    say("signing…");
-    await wallet.call(state.net, state.account, fn, args);
+    if (state.grant) {
+      say("signing here…");
+      await gnosession.call({
+        rpcUrl: state.net.rpc, chainId: state.net.chainId,
+        session: state.session, grant: state.grant, func: fn, args,
+      });
+    } else {
+      say("signing…");
+      await wallet.call(state.net, state.account, fn, args);
+    }
     say("sent — waiting for the block", "live");
     setTimeout(refresh, 1500);
   } catch (err) { say(err.message, "bad"); }
@@ -204,6 +211,7 @@ function setNetwork(name) {
   state.net = NETWORKS[name];
   $("link-realm").href = `https://gno.land/${state.net.realm.replace("gno.land/", "")}`;
   $("cmd").textContent = gnokeyCommand(state.net, "Play", ["<table>", "<column>"]);
+  sessionPanel.refresh();
   if (state.mode === "chain") refresh();
 }
 
@@ -230,7 +238,11 @@ document.addEventListener("click", async (ev) => {
     say("link copied — it opens with no chain and no wallet", "live");
   }
   if (t.id === "connect") {
-    try { state.account = await wallet.connect(); say(`connected ${shortAddr(state.account)}`, "live"); renderTables(); draw(); }
+    try {
+      state.account = await wallet.connect();
+      say(`connected ${shortAddr(state.account)}`, "live");
+      renderTables(); draw(); sessionPanel.refresh();
+    }
     catch (err) { say(err.message, "bad"); }
   }
 });
@@ -238,6 +250,25 @@ document.addEventListener("click", async (ev) => {
 $("network").addEventListener("change", (ev) => setNetwork(ev.target.value));
 $("botside").addEventListener("change", draw);
 window.addEventListener("hashchange", () => { readHash(); draw(); });
+
+const sessionPanel = onboarding.mount({
+  el: $("session"),
+  net: () => state.net,
+  getAccount: () => state.account,
+  setAccount: (addr) => {
+    // Named, not connected: good enough to read a grant and to be the caller in
+    // one, and it never lets this page sign anything the session cannot.
+    state.account = addr;
+    say(`playing as ${shortAddr(addr)}`, "live");
+    renderTables();
+  },
+  keyName: "YOURKEY",
+  onChange: ({ session, grant }) => {
+    state.session = session;
+    state.grant = grant;
+    draw(); // the move buttons are enabled by having a signer, whichever it is
+  },
+});
 
 setNetwork("mainnet");
 readHash();
